@@ -1,0 +1,33 @@
+name: Deploy FastAPI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Pull & Restart on Server
+        run: |
+          ssh -o StrictHostKeyChecking=no  ${{ secrets.SERVER_IP }} << 'ENDSSH'
+            cd /root/FastApiProject
+            rm -rf .git/rebase-merge
+            git reset --hard origin/main
+            git pull ${{ secrets.GIT_PRIVATE_KEY }}@github.com/Prestgg1/FastApiProject.git  
+            git checkout main
+            source .venv/bin/activate
+            pkill -f 'uvicorn' || true
+            cp ~/.env /root/FastApiProject/.env
+            nohup uvicorn main:app --host 0.0.0.0 --port 8000 --forwarded-allow-ips="*" > app.log 2>&1 &
+          ENDSSH
