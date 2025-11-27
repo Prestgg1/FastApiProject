@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, Header
-from sqlmodel.ext.asyncio.session import AsyncSession
+from fastapi import APIRouter, Header
 
-from database import Session, get_db
+from database import Session
 from schemas.user_schema import AuthResponse, CustomerRegister, UserLogin
 from services.auth_service import AuthService
 

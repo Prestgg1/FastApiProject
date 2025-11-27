@@ -7,6 +7,12 @@ from models import GenderEnum
 from models.user import UserRole
 
 
+class UserField(BaseModel):
+    id: int
+    name: str
+    image: str
+
+
 class UserBase(BaseModel):
     id: int
     name: str
