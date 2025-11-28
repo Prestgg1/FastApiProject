@@ -47,12 +47,11 @@ async def test_create_blog_minimal(admin_client: AsyncClient):
     assert data["slug"] == "minimal-blog"
     assert data["keywords"] is None
     assert data["image"] is None
-    assert data["status"] is True  # Default value
+    assert data["status"] is True
 
 
 @pytest.mark.asyncio
 async def test_create_blog_with_custom_slug(admin_client: AsyncClient):
-    """Custom slug ilə blog yarat"""
     blog_data = {
         "title": "My Amazing Post",
         "slug": "custom-slug-2024",
@@ -72,7 +71,6 @@ async def test_create_blog_with_custom_slug(admin_client: AsyncClient):
 async def test_create_blog_duplicate_title(
     admin_client: AsyncClient, sample_blogs: list[Blog]
 ):
-    """Eyni title-la blog yarat (slug conflict həlli)"""
     blog_data = {
         "title": "Python FastAPI",  # Artıq var
         "description": "Another FastAPI tutorial",
