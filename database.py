@@ -3,7 +3,7 @@ from typing import Annotated
 
 from dotenv import load_dotenv
 from fastapi import Depends
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 from upstash_redis import Redis
@@ -38,7 +38,9 @@ else:
         pool_recycle=1800,
         echo=True if ENVIRONMENT == "development" else False,
     )
-
+SessionLocal = async_sessionmaker(
+    bind=engine, class_=AsyncSession, expire_on_commit=False
+)
 redis = Redis(
     os.getenv("UPSTASH_REDIS_REST_URL") or "",
     os.getenv("UPSTASH_REDIS_REST_TOKEN") or "",

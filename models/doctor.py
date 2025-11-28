@@ -1,21 +1,24 @@
 from datetime import date, datetime
 from typing import TYPE_CHECKING, List, Optional
-from . import GenderEnum
-from sqlmodel import Field, Relationship, SQLModel,Column,Enum as SQLEnum
-from models.doctor_category import DoctorCategory
-from models import TimestampMixin,GenderMixin
-from models.user import User
-if TYPE_CHECKING:
-    from models import  Review
 
+from sqlmodel import Column
+from sqlmodel import Enum as SQLEnum
+from sqlmodel import Field, Relationship, SQLModel
+
+from models import GenderMixin, TimestampMixin
+from models.doctor_category import DoctorCategory
+from models.user import User
+
+from . import GenderEnum
+
+if TYPE_CHECKING:
+    from models import Review
 
 
 class Doctor(TimestampMixin, SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True, index=True)
-
     user_id: int = Field(foreign_key="user.id")
     user: User = Relationship(back_populates="doctor")
-
     finCode: str = Field(default=None, max_length=7, unique=True)
     phone: str = Field(default=None, max_length=50, unique=True)
     birthday: date = Field(default=None)
@@ -25,9 +28,7 @@ class Doctor(TimestampMixin, SQLModel, table=True):
     address: str = Field(default=None, max_length=255)
     clinic: str = Field(default=None, max_length=100)
     about: str = Field(default=None, max_length=255)
-    gender: GenderEnum = Field(
-        sa_column=Column(SQLEnum(GenderEnum), nullable=False)
-    )
+    gender: GenderEnum = Field(sa_column=Column(SQLEnum(GenderEnum), nullable=False))
     doctor_category_id: int = Field(foreign_key="doctor_categories.id")
     doctor_category: DoctorCategory = Relationship(back_populates="doctor")
     #

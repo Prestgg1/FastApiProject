@@ -34,6 +34,5 @@ class Appointment(TimestampMixin, SQLModel, table=True):
     model_id: int
     reason: Optional[str] = None
     cancelled_by: Optional[CancelledBy] = None
-
     customer_id: int = Field(foreign_key="customer.id")
     customer: "Customer" = Relationship(back_populates="appointment")
