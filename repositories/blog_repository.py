@@ -1,7 +1,7 @@
 from typing import Optional, Sequence
 
 from slugify import slugify
-from sqlmodel import select
+from sqlmodel import col, or_, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from models.blog import Blog
@@ -127,7 +127,6 @@ class BlogRepository:
     async def search(
         db: AsyncSession, query: str, skip: int = 0, limit: int = 100
     ) -> Sequence[Blog]:
-        from sqlmodel import col, or_
 
         search_term = f"%{query.lower()}%"
 
